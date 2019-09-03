@@ -8,8 +8,7 @@
 library(OpenRepGrid)
 library(pvclust)
 
-x <- boeker 
-  
+x <- boeker    # dataset contained in package, see ?boeker
   
 # 01 Clustered Bertin  -----------
 
@@ -27,9 +26,9 @@ dev.off()
 
 # 03 Cluster Bootstrap ----------------------
 
-set.seed(0)
+s <- clusterBoot(boeker, along = 2, seed = 123)
 png("img/03-clusterboot.png", width = 20, height = 15, res = 300, units = "cm")
-s <- clusterBoot(boeker, along = 2)
+par(mar = c(7,5,5,5))
 plot(s)
 pvrect(s, max.only = FALSE)
 dev.off()
