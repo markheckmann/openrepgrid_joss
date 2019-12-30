@@ -1,8 +1,5 @@
 ---
 title: 'OpenRepGrid: An R Package for the Analysis of Repertory Grid Data'
-output: 
-  html_document:
-    keep_md: true
 authors:
 - affiliation: 1
   name: Mark Heckmann
@@ -17,18 +14,6 @@ affiliations:
   index: 1
   name: University of Bremen, Germany
 ---
-
-<style type="text/css">
-code.r{
-  font-size: 12px;
-}
-pre {
-  font-size: 12px
-}
-</style>
-
-
-
 
 
 # Introduction
@@ -69,81 +54,26 @@ An up-to-date, comprehensive overview of all implemented features can be found o
 * *Data handling*: Importing and exporting grid data from different formats, sorting grids, several included datasets
 * *Analyzing constructs*: Descriptive statistics, correlations, distances, PCA of construct correlations, cluster analysis, aligning constructs
 * *Analyzing elements*: Descriptive statistics, correlations, distances, standardized element distances, cluster analysis
-* *Visualization*: (Clustered) Bertin plots (i.e. heatmaps), biplots, clustering dendrograms
+* *Visualization*: (Clustered) Bertin plots, biplots, clustering dendrograms
 * *Indexes*: Intensity, complexity, PVAFF, measures of cognitive conflict, implicative dilemmas
 
-In the remainder, three repgrid visualizations which are frequently used in publications and one statistical analysis, are briefly outlined as example features. Figure 1 shows a Bertin diagram (i.e. heatmap) of a grid administered to a schizophrenic patient undergoing psychoanalytically oriented psychotherapy [@boker_reconstruction_1996]. The data was taken during the last stage of therapy. The data for this example is already included in the package. The ratings in the grid are color-coded allowing to spot similar rating patterns. Also, the grid was submitted to cluster analysis, thereby reordering the constructs and elements by similarity as indicated by the dendrograms printed alongside the diagram. The following code creates the diagram.
+In the remainder, three visualization features which are frequently used in publications are briefly outlined as examples. Figure 1 shows a Bertin diagram of a grid administered to a schizophrenic patient undergoing psychoanalytically oriented psychotherapy [@boker_reconstruction_1996]. The data was taken during the last stage of therapy. The data for this example is already included in the package. The ratings in the grid  are color-coded allowing to spot similar rating patterns. Also, the grid was submitted to cluster analysis, thereby reordering the constructs and elements by similarity as indicated by the dendrograms printed alongside the diagram.
 
-
-```r
-bertinCluster(boeker, colors = c("white", "darkred"))
-```
-
-
-Figure 2 shows a biplot of the grid data from Figure 1. A biplot is the generalization of a scatterplot from two to many axes, all displayed in a single plot. It allows reading off the approximate score of each element on each construct by projecting an element's position in the plot on the construct axes [@greenacre_biplots_2010;@slater_measurement_1976]. In the biplot, it can, for example, be seen that  "father" is the element construed most closely to "ideal self". Figure 2 is created by the following code. 
-
-
-```r
-biplot2d(boeker)
-```
+Figure 2 shows a biplot of the grid data from Figure 1. A biplot is the generalization of a scatterplot from two to many axes, all displayed in a single plot. It allows reading off the approximate score of each element on each construct by projecting an element's position in the plot on the construct axes [@greenacre_biplots_2010;@slater_measurement_1976]. In the biplot, it can, for example, be seen that  "father" is the element construed most closely to "ideal self".
 
 ![**Figure 2.** Biplot of Böker's dataset.](img/02-biplot.png)
 
-Figure 3 shows the element dendrogram, i.e. the result of a cluster analysis using Ward's method with a Euclidean distances measure. Using an approach suggested by @heckmann_new_2016, the dendrogram structures are also tested for stability. Stable or significant structures are framed by a rectangle, indicating that "childhood self", "self before illness", "self with delusion", and "self as dreamer" forms a stable group of elements. Figure 3 is created by the following code. 
-
-
-```r
-s <- clusterBoot(boeker, along = 2, seed = 123)
-plot(s)
-pvrect(s, max.only = FALSE)
-```
+Figure 3 shows the element dendrogram, i.e. the result of a cluster analysis using Ward's method with a Euclidean distances measure. Using an approach suggested by @heckmann_new_2016, the dendrogram structures are also tested for stability. Stable or significant structures are framed by a rectangle, indicating that "childhood self", "self before illness", "self with delusion", and "self as dreamer" forms a stable group of elements.
 
 ![**Figure 3.** Dendrogram of clustering results.](img/03-clusterboot.png)
 
-A last example is a method to calculated distances between elements. Inter-element distances are a common measure used in the analysis of grids [@fransella_manual_2004]. As the maximal Euclidean distances between two elements depends on the rating scale and the number of constructs in a grid, several approaches to standardizing inter-element distances have been made. One well known approach which has come to be known as *Slater distances*, divides the distance by its expected value [@slater_measurement_1977]. However, @hartmann_element_1992 showed in a simulation study that Slater distances have a skewed distribution, as well as a mean and a standard deviation which depends on the number of elicited constructs. Hartmann suggested an improvement by applying a transformation which takes into account the estimated mean and the standard deviation of the derived distribution to standardize Slater distances across different grid sizes. As a result, *Hartmann distances* represent are a more accurate version. This development serves as another example of above mentioned situation, as to the best of my knowledge, Hartmann distances are currently only implemented in OpenRepGrid. Hartmann distances can be calculated using the following code. 
-
-
-```r
-distanceHartmann(boeker)
-```
-
-```
-
-##########################
-Distances between elements
-##########################
-
-Distance method:  Hartmann (standardized Slater distances) 
-
-                                1     2     3     4     5     6     7     8     9    10    11    12    13    14    15
-(1) self                  1       -0.28  1.58  1.92  0.80 -1.33  1.20 -0.29 -0.04  2.62 -5.24  2.66  2.87  2.28  2.89
-(2) ideal self            2             -0.78  1.36 -0.47 -2.09 -0.56  0.12 -1.02  0.12 -3.69 -1.50 -1.45 -1.63 -1.71
-(3) mother                3                    1.70  2.99  0.22  2.82  1.15  2.27  2.09 -3.84  1.91  1.06  1.44  1.92
-(4) father                4                          2.31 -1.04  2.23  0.55  1.00  1.92 -4.39  0.96  0.50  0.08  0.63
-(5) kurt                  5                                0.63  2.72  1.27  2.69  1.74 -3.37  1.30  0.35  0.79  1.01
-(6) karl                  6                                      0.29  1.63  2.14 -0.66  0.10 -1.21 -1.53 -0.60 -1.04
-(7) george                7                                            0.45  2.19  1.17 -3.39  1.70  0.54  0.42  1.35
-(8) martin                8                                                  2.03  1.22 -1.85 -0.67 -0.73 -0.13 -0.53
-(9) elizabeth             9                                                        0.76 -2.07 -0.08 -0.91 -0.29  0.05
-(10) therapist           10                                                             -4.91  2.20  2.35  1.97  2.22
-(11) irene               11                                                                   -5.47 -5.65 -4.79 -5.52
-(12) childhood self      12                                                                          3.66  3.16  4.22
-(13) self before illness 13                                                                                3.60  3.79
-(14) self with delusion  14                                                                                      3.52
-(15) self as dreamer     15                                                                                          
-
-For calculation the parameters from Hartmann (1992) were used. Use 'method=new' or method='simulate' for a more accurate version.
-```
-
-# Contributing
-
-tbd
-
+A last example is 
 
 # Acknowledgements
 
 A lot of thanks to the contributors and supporters of this package: Richard C. Bell, Alejandro García, and Diego Vitali.
 
 # References
+
 
 
