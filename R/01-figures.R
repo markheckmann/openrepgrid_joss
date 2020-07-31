@@ -32,3 +32,14 @@ par(mar = c(7,5,5,5))
 plot(s)
 pvrect(s, max.only = FALSE)
 dev.off()
+
+
+# 04 Implicitive Dilemma Plot ----------------------
+
+id <- indexDilemma(boeker, self = 1, ideal = 2)
+png("img/04-implicative-dilemmas.png", width = 20, height = 15, res = 300, units = "cm")
+par(mar = c(1,1,1,1))
+plot(id, node.size = 60, node.text.cex = .9, edge.label.cex = 1.2, 
+     edge.label.color = grey(.3), edge.arrow.size = .7)
+dev.off()
+
