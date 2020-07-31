@@ -6,7 +6,7 @@ tags:
 - R package
 authors:
 - name: Mark Heckmann
-  orcid: 0000-0002-0736-7417#
+  orcid: 0000-0002-0736-7417
   affiliation: 1
 affiliations:
 - name: University of Bremen, Germany
